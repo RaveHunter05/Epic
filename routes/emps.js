@@ -66,7 +66,7 @@ router.get('/users', (req,res) =>{
 
 // Seleccionar usuarios por nombre
 
-router.get('user-nombre/:username', (req,res)=>{
+router.get('/user-nombre/:username', (req,res)=>{
     let {username}=req.params
     User.findAll({
         where:{
