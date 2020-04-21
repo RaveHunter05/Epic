@@ -111,6 +111,18 @@ router.get('/usuarios-rol/:rol', (req,res)=>{
     })
 })
 
+// Actualizar usuario
+router.put('/actualizar-usuario', (req,res)=>{
+    let {id, username, password, role, state} =req.body
+    User.update({username, password, role, state}, {
+        where:{
+            id
+        }
+    })
+    .then(response=> res.json({"respuesta: ": response}))
+    .catch(err=> res.json({'error: ': err}))
+})
+
 // Seleccionar todos los colaboradores
 
 router.get('/colaboradores', (req,res)=>{
