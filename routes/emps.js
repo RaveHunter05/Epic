@@ -39,6 +39,20 @@ router.get('/employees', (req,res) => {
     })
 })
 
+// Seleccionar todos los empleados y sus categorias
+
+router.get('/employees-categories', (req,res) => {
+    Employee.findAll({
+        include: [{
+            model: Category
+        }]
+    })
+    .then(employee=>{
+        res.json({"respuesta: ": employee})
+    })
+    .catch(err=> res.json({'error: ': err}))
+})
+
 //Crear empleado
 
 router.post('/add-employee', (req,res)=>{
