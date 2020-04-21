@@ -83,16 +83,30 @@ User = db.define('user', {
 
 Employee.hasMany(In_out, {
     foreignKey:'employees_id'
+},{
+    onDelete: 'cascade'
 })
 Category.hasMany(Employee,{
     foreignKey: 'categories_id'
+},
+{
+    onDelete: 'cascade'
 })
-Employee.belongsTo(Category, {foreignKey: 'categories_id'})
+Employee.belongsTo(Category, 
+    {foreignKey: 'categories_id'},
+    {
+        onDelete: 'cascade'
+    })
 Employee.hasOne(User, {
     foreignKey: 'employees_id'
+}, {
+    onDelete: 'cascade'
 })
 
-User.belongsTo(Employee, {foreignKey: 'employees_id'})
+User.belongsTo(Employee, 
+    {foreignKey: 'employees_id'},{
+        onDelete: 'cascade'
+    })
 
 
 
