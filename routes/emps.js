@@ -74,7 +74,7 @@ router.get('/user-nombre/:username', (req,res)=>{
         }
     })
     .then(users=>res.json({"respuesta: ": users}))
-    .catch(err=> console.log('hubo un error', err))
+    .catch(err=> res.json({"There was an error: ": err}))
 })
 
 // Seleccionar usuarios por nombre
