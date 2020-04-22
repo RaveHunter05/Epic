@@ -25,7 +25,7 @@ router.post('/add-category', (req,res) => {
         category_name
     })
     .then(categories=>{
-        res.redirect('/categories')
+        res.json({'respuesta': categories})
     })
     .catch(err=> console.log('There was an error adding', err))
 })
@@ -248,7 +248,7 @@ router.post('/create-in', (req,res)=>{
         departure_time,
         employees_id
     })
-    .then(()=> res.redirect('/inout'))
+    .then(response=> res.json({'respuesta: ': response}))
     .catch(err=> console.log('There was an error: ', err))
 })
 
