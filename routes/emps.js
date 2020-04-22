@@ -167,12 +167,15 @@ router.get('/colaboradores', (req,res)=>{
 
 // Seleccionar empleados por categoria 
 
-router.get('/colaboradores-categoria/:categories_id', (req,res)=>{
-    let {categories_id}= req.params
+router.get('/colaboradores-categoria/:category_name', (req,res)=>{
+    let {category_name}= req.params
     Employee.findAll({
-        where:{
-            categories_id
-        }
+        include:[{
+            model: Category,
+            where : {
+                category_name
+            }
+        }]
     })
     .then(response=>{
         res.json({'response': response})
@@ -226,10 +229,9 @@ router.get('/inout', (req,res) => {
 // Ingresar entradas
 
 router.post('/create-in', (req,res)=>{
-    let {check_in_time, departure_time, employees_id} = req.body
+    let {check_in_time, employees_id} = req.body
     In_out.create({
         check_in_time,
-        departure_time,
         employees_id
     })
     .then(response=> res.json({'respuesta: ': response}))
@@ -241,39 +243,11 @@ router.post('/create-in', (req,res)=>{
 // Este es el mas importante, aqui deberia calcularse las horas totales
 // el pago total y luego llenarlo en la tabla
 
-//Revisar esto
-router.post('/create-out', (req,res)=>{
-    let {id, departure_time, employees_id} = req.body
-    return reparture_time
-    let pago=0
-    Employee.findAll({
-        where: {
-            id: employees_id
-        },
-        attributes: ['pay_per_hour']
-    }).then(list=> pago = res.status(1).json(list))
-    console.log(pago)
-    return
-    // Ingresa la hora de salida
-    In_out.update({departure_time},{
-        where:{
-            id
-        }
-    }).then(()=>{
-        res.redirect('/inout')
-    }).catch(err=>console.log('There was an error', err))
-    // Encuentra el pago que recibe ese usuario
-    Employee.findAll({
-        where: {
-            id: employees_id
-        },
-        attributes: ['pay_per_hour']
-    }).then(list=> pago = res.status(1).json(list))
-    
-    In_out.update({total_pay: pago},{
-        where:{
-            id
-        }
+router.put('/create-out', (req,res)=>{
+    let {employees_id, departure_time} = req.body;
+    In_out.findOne
+    .then(response=>{
+        
     })
 })
 
