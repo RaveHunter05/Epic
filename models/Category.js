@@ -86,6 +86,15 @@ Employee.hasMany(In_out, {
 },{
     onDelete: 'cascade'
 })
+
+In_out.belongsTo(Employee,
+    {
+        foreignKey: 'employees_id'
+    },
+    {
+        onDelete: 'cascade'
+    })
+    
 Category.hasMany(Employee,{
     foreignKey: 'categories_id'
 },

@@ -227,7 +227,47 @@ router.get('/inout', (req,res) => {
     .catch(err => console.log('There was an error', err))
 })
 
-// Falta horas trabajadas en rango de fecha
+// Seleccionar todos los in out con datos del empleado
+
+router.get('/inout-employee', (req,res) => {
+    In_out.findAll({
+        include: [{
+            model: Employee
+        }]
+    })
+    .then(inout=>{
+        res.json({"respuesta: ": inout})
+    })
+    .catch(err => console.log('There was an error', err))
+})
+
+// Actualizar cualquier dato de inout
+
+router.put('/inout', (req,res)=>{
+    let {
+        employees_id, 
+        total_pay, 
+        total_horas, 
+        check_in_time, 
+        departure_time
+    }= req.body
+
+    In_out.update({
+        employees_id, 
+        total_pay, total_horas, 
+        check_in_time, 
+        departure_time})
+    .then(response=>res.json({'respuesta: ': response}))
+})
+
+// Crear in_out sin datos
+
+router.post('/inout', (req,res)=>{
+    In_out.create({})
+    .then(response=>res.json({'respuesta: ': 'inout vacio creado exitosamente xd'}))
+})
+
+router.post('')
 
 // Ingresar entradas
 
