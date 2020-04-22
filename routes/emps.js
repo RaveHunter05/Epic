@@ -108,8 +108,8 @@ router.get('/user-nombre/:username', (req,res)=>{
 
 // Seleccionar usuarios por nombre
 
-router.get('/usuer-employees-nombre/:nombre', (req,res)=>{
-    let nombre= req.params.nombre
+router.get('/user-employees-nombre/:nombre', (req,res)=>{
+    let {nombre}= req.params
     User.findAll({
         include: [{
             model: Employee,
@@ -167,45 +167,29 @@ router.get('/colaboradores', (req,res)=>{
 
 // Seleccionar colaboradores por categoria 
 
-router.get('/colaboradores-categoria/:categoria', (req,res)=>{
-    let categoria= req.params.categoria
-    User.findAll({
+router.get('/colaboradores-categoria/:categories_id', (req,res)=>{
+    let {categories_id}= req.params
+    Employee.findAll({
         where:{
-            state:1
-        },
-        include: [
-            {model: Employee, 
-                include: [{
-                    model: Category,
-                    where: {
-                        category_name: categoria
-                    }
-                }]}
-        ]
+            categories_id
+        }
     })
     .then(response=>{
-        (response[0]["employee"]==null) ? res.json({"error": "no hay empleados en esa categoria"}) : res.json({"datos": response})
+        res.json({'response': response})
     })
-    
 })
 
 // Seleccionar colaboradores por nombre
 
-router.get('/colaboradores-nombre/:nombre', (req,res)=>{
-    let nombre= req.params.nombre
-    User.findAll({
+router.get('/colaboradores-nombre/:names', (req,res)=>{
+    let {names}= req.params
+    Employee.findAll({
         where:{
-            state:1
-        },
-        include: [{
-            model: Employee,
-            where:{
-                names: nombre
-            }
-        }]
+            names
+        }
     })
     .then(response=>{
-        (response[0]==null) ? res.json({"error": "no hay colaboradores con ese nombre"}): res.json({"datos":  response})
+        res.json({'respuesta: ': response})
     })
 })
 
