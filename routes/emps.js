@@ -66,7 +66,7 @@ router.post('/add-employee', (req,res)=>{
         categories_id,
         pay_per_hour
     })
-    .then(employees=> res.redirect('/employees'))
+    .then(response=> res.json({'respuesta: ': response}))
     .catch(err=> console.log('There was an error adding: ', err))
 })
 
