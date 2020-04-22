@@ -245,6 +245,7 @@ router.get('/inout-employee', (req,res) => {
 
 router.put('/inout', (req,res)=>{
     let {
+        id,
         employees_id, 
         total_pay, 
         total_horas, 
@@ -256,7 +257,12 @@ router.put('/inout', (req,res)=>{
         employees_id, 
         total_pay, total_horas, 
         check_in_time, 
-        departure_time})
+        departure_time}, 
+        {
+            where:{
+                id
+            }
+        })
     .then(response=>res.json({'respuesta: ': response}))
 })
 
