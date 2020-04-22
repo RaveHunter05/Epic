@@ -246,28 +246,48 @@ router.post('/create-in', (req,res)=>{
 // Este es el mas importante, aqui deberia calcularse las horas totales
 // el pago total y luego llenarlo en la tabla
 
-// router.put('/create-out', (req,res)=>{
-//     let {id, employees_id, departure_time} = req.body;
-//     In_out.update({departure_time}, {
-//         where:{
-//             id
-//         }
-//     })
-//     .then(()=>{
-//         In_out.findAll({
-//             attributes: ['check_in_time', 'departure_time'],
-//             where:{
-//                 id
-//             }
-//         })    
-//         .then(response=> {
-//             let {check_in_time,departure_time}= response[0]
-//             let tiempo= (departure_time.valueOf() - check_in_time.valueOf()) / 3600000
-//             res.json({'respuesta': tiempo})
-//         })
-//     })
+router.put('/create-out', (req,res)=>{
+    let {id, employees_id, departure_time} = req.body;
+    let me=this
+    In_out.update({departure_time}, {
+        where:{
+            id
+        }
+    })
+    .then(()=>{
+        In_out.findAll({
+            attributes: ['check_in_time', 'departure_time'],
+            where:{
+                id
+            }
+        })    
+        .then(response=> {
+            let {check_in_time,departure_time}= response[0]
+            let tiempo= (departure_time.valueOf() - check_in_time.valueOf()) / 3600000
+            Employee.findOne({
+                attributes: ['pay_per_hour'],
+                where:{
+                    id: employees_id
+                }
+            })
+            .then(response=>{
+                let paga= tiempo * response.pay_per_hour
+                In_out.update({
+                    total_pay: paga,
+                    total_horas: tiempo
+                },{
+                    where:{
+                        id
+                    }
+                })
+                .then(response=>{
+                    res.json({'resultado': response})
+                })
+            })
+        })
+    })
     
-// })
+})
 
 
 module.exports= router
