@@ -70,6 +70,21 @@ router.post('/add-employee', (req,res)=>{
     .catch(err=> console.log('There was an error adding: ', err))
 })
 
+// Actualizar empleado
+
+router.put('/employees', (req,res)=>{
+    let {id, email, phone, pay_per_hour, categories_id } = req.body
+    Employee.update({
+        email, phone, pay_per_hour, categories_id
+    }, {
+        where:{
+            id
+        }
+    })
+    .then(response=>res.json({'respuesta: ': response}))
+    .catch(err=> res.json({'error:': err}))
+})
+
 // Seleccionar todos los usuarios
 
 router.get('/users', (req,res) =>{
@@ -148,32 +163,6 @@ router.get('/colaboradores', (req,res)=>{
     })
     .then(response=>res.json({"datos":  response}))
     .catch(err=> console.log('error aqui alv', err))
-})
-
-// Editar colaborador
-
-router.put('/colaboradores', (req,res)=>{
-    let {id, email, phone, pay_per_hour, categories_id } = req.body
-    User.findOne({
-        where:{
-            state:1
-        },
-        include: [{
-            model:Employee,
-            where:{
-                id
-            }
-        }]
-    })
-    .then(res=>res.employee.update({
-        email, phone, pay_per_hour, categories_id
-    }, {
-        where:{
-            id
-        }
-    }))
-    .then(response=>res.json({'respuesta: ': response}))
-    .catch(err=> res.json({'error:': err}))
 })
 
 // Seleccionar colaboradores por categoria 
