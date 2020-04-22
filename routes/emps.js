@@ -189,7 +189,10 @@ router.get('/colaboradores-nombre/:names', (req,res)=>{
     Employee.findAll({
         where:{
             names
-        }
+        },
+        include: [{
+            model: Category
+        }]
     })
     .then(response=>{
         res.json({'respuesta: ': response})
@@ -243,13 +246,28 @@ router.post('/create-in', (req,res)=>{
 // Este es el mas importante, aqui deberia calcularse las horas totales
 // el pago total y luego llenarlo en la tabla
 
-router.put('/create-out', (req,res)=>{
-    let {employees_id, departure_time} = req.body;
-    In_out.findOne
-    .then(response=>{
-        
-    })
-})
+// router.put('/create-out', (req,res)=>{
+//     let {id, employees_id, departure_time} = req.body;
+//     In_out.update({departure_time}, {
+//         where:{
+//             id
+//         }
+//     })
+//     .then(()=>{
+//         In_out.findAll({
+//             attributes: ['check_in_time', 'departure_time'],
+//             where:{
+//                 id
+//             }
+//         })    
+//         .then(response=> {
+//             let {check_in_time,departure_time}= response[0]
+//             let tiempo= (departure_time.valueOf() - check_in_time.valueOf()) / 3600000
+//             res.json({'respuesta': tiempo})
+//         })
+//     })
+    
+// })
 
 
 module.exports= router
