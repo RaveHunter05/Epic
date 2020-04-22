@@ -165,7 +165,7 @@ router.get('/colaboradores', (req,res)=>{
     .catch(err=> console.log('error aqui alv', err))
 })
 
-// Seleccionar colaboradores por categoria 
+// Seleccionar empleados por categoria 
 
 router.get('/colaboradores-categoria/:categories_id', (req,res)=>{
     let {categories_id}= req.params
@@ -179,7 +179,7 @@ router.get('/colaboradores-categoria/:categories_id', (req,res)=>{
     })
 })
 
-// Seleccionar colaboradores por nombre
+// Seleccionar empleados por nombre
 
 router.get('/colaboradores-nombre/:names', (req,res)=>{
     let {names}= req.params
