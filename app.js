@@ -2,6 +2,7 @@ const express= require('express')
 const exp= require('express-handlebars')
 const bodyParser= require('body-parser')
 const path=require('path')
+const dotenv=require('dotenv').config()
 
 //Database configuration
 const db=require('./config/database')
