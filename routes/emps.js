@@ -269,7 +269,8 @@ router.put('/inout', (req,res)=>{
 // Crear in_out sin datos
 
 router.post('/inout', (req,res)=>{
-    In_out.create({})
+    let {employees_id} =req.body
+    In_out.create({employees_id})
     .then(response=>res.json({'respuesta: ': 'inout vacio creado exitosamente xd'}))
 })
 
