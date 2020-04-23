@@ -52,6 +52,9 @@ In_out = db.define('in_out', {
     },
     total_horas:{
         type: Sequelize.INTEGER
+    },
+    created_at:{
+        type:Sequelize.DATE
     }
 },{
     tableName: 'in_out',
