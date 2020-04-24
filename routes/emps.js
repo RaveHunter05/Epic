@@ -241,6 +241,38 @@ router.get('/inout-employee', (req,res) => {
     .catch(err => console.log('There was an error', err))
 })
 
+// Seleccionar todas las asistencias por id de empleado
+router.get('/inout-employee-name/:names', (req,res)=>{
+    let {names} =req.params
+    In_out.findAll({
+        include:[{
+            model: Employee,
+            where: {
+                names
+            }
+        }]
+    })
+    .then(response=>{
+        res.json({'datos': response})
+    })
+})
+
+// Seleccionar entre fechas en inout
+
+router.get('/inout-between/:fecha1/:fecha2', (req,res)=>{
+    let {fecha1, fecha2}=req.params
+    In_out.findAll({
+        where:{
+            created_at: {
+                [Op.between]: [fecha1, fecha2]
+            }
+        }
+    })
+    .then(response=>{
+        res.json({'datos': response})
+    })
+})
+
 // Actualizar cualquier dato de inout
 
 router.put('/inout', (req,res)=>{
