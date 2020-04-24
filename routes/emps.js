@@ -257,16 +257,22 @@ router.get('/inout-employee-name/:names', (req,res)=>{
     })
 })
 
-// Seleccionar entre fechas en inout
+// Seleccionar entre fechas en inout con id de empleado
 
-router.get('/inout-between/:fecha1/:fecha2', (req,res)=>{
-    let {fecha1, fecha2}=req.params
+router.get('/inout-between/:id/:fecha1/:fecha2', (req,res)=>{
+    let {id, fecha1, fecha2}=req.params
     In_out.findAll({
         where:{
             created_at: {
                 [Op.between]: [fecha1, fecha2]
             }
-        }
+        },
+        include:[{
+            model: Employee,
+            where:{
+                id
+            }
+        }]
     })
     .then(response=>{
         res.json({'datos': response})
