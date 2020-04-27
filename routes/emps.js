@@ -265,8 +265,8 @@ router.get('/inout-between/:id/:fecha1/:fecha2', (req,res)=>{
         where:{
             created_at: {
                 [Op.and]:{
-                    [Op.gte]:fecha1,
-                    [Op.lte]:fecha2
+                    [Op.gte]:fecha1+' 00:00:00',
+                    [Op.lte]:fecha2+' 24:00:00'
                 }
             }
         },
