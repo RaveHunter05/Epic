@@ -264,7 +264,10 @@ router.get('/inout-between/:id/:fecha1/:fecha2', (req,res)=>{
     In_out.findAll({
         where:{
             created_at: {
-                [Op.between]: [fecha1, fecha2]
+                [Op.and]:{
+                    [Op.gte]:fecha1,
+                    [Op.lte]:fecha2
+                }
             }
         },
         include:[{
