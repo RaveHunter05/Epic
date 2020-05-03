@@ -102,7 +102,10 @@ router.get('/user-nombre/:username', (req,res)=>{
             username:{
                 [Op.like]:`%${username}%`
             }
-        }
+        },
+        include: [{
+            model: Employee
+        }]
     })
     .then(users=>res.json({"respuesta: ": users}))
     .catch(err=> res.json({"There was an error: ": err}))
