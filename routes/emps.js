@@ -73,9 +73,9 @@ router.post('/add-employee', (req,res)=>{
 // Actualizar empleado
 
 router.put('/employees', (req,res)=>{
-    let {id, email, phone, pay_per_hour, categories_id } = req.body
+    let {id, email, phone, pay_per_hour, categories_id, state } = req.body
     Employee.update({
-        email, phone, pay_per_hour, categories_id
+        email, phone, pay_per_hour, categories_id, state
     }, {
         where:{
             id
@@ -99,7 +99,9 @@ router.get('/user-nombre/:username', (req,res)=>{
     let {username}=req.params
     User.findAll({
         where:{
-            username
+            username:{
+                [Op.like]:`%${username}%`
+            }
         }
     })
     .then(users=>res.json({"respuesta: ": users}))
@@ -114,7 +116,9 @@ router.get('/user-employees-nombre/:nombre', (req,res)=>{
         include: [{
             model: Employee,
             where:{
-                names: nombre
+                names:{
+                    [Op.like]:`%${nombre}%`
+                }
             }
         }]
     })
@@ -173,7 +177,9 @@ router.get('/colaboradores-categoria/:category_name', (req,res)=>{
         include:[{
             model: Category,
             where : {
-                category_name
+                category_name:{
+                    [Op.like]: `%${category_name}%`
+                }
             }
         }]
     })
@@ -188,7 +194,9 @@ router.get('/colaboradores-nombre/:names', (req,res)=>{
     let {names}= req.params
     Employee.findAll({
         where:{
-            names
+            names:{
+                [Op.like]:`%${names}%`
+            }
         },
         include: [{
             model: Category

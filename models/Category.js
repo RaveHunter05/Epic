@@ -24,6 +24,9 @@ Employee = db.define('employee', {
     },
     pay_per_hour:{
         type:Sequelize.DOUBLE
+    },
+    state:{
+        type:Sequelize.INTEGER
     }
 },{
     tableName: 'employees',
