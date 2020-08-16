@@ -3,6 +3,7 @@ const router = express.Router()
 const db = require('../config/database')
 const {Category, Employee, In_out, User} = require('../models/Category')
 const Sequelize= require('sequelize')
+const exportarExcel = require('../excel/crear_excel')
 
 const Op=Sequelize.Op
 
@@ -291,6 +292,27 @@ router.get('/inout-between/:id/:fecha1/:fecha2', (req,res)=>{
     .then(response=>{
         res.json({'datos': response})
     })
+})
+
+// Seleccionar unicamente inout
+
+router.get('/inout-only/:fecha1/:fecha2', (req,res) => {
+    let {fecha1, fecha2}=req.params
+    In_out.findAll({
+        where:{
+            created_at:{
+                [Op.between]:[fecha1, fecha2]
+            }
+        },
+        include:[{
+            model: Employee
+        }]
+    })
+    .then(inout=>{
+        console.log(exportarExcel.exportExcel(inout))
+        res.json({"respuesta: ": inout})
+    })
+    .catch(err => console.log('There was an error', err))
 })
 
 // Actualizar cualquier dato de inout
