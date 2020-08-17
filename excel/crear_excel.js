@@ -3,53 +3,52 @@ var excel = require('excel4node');
 // Create a new instance of a Workbook class
 var workbook = new excel.Workbook();
 
+var options={
+  'sheetFormat': {
+    'baseColWidth': 30,
+},
+}
+
 // Add Worksheets to the workbook
-var worksheet = workbook.addWorksheet('Sheet 1');
-var worksheet2 = workbook.addWorksheet('Sheet 2');
-
-// Create a reusable style
-var style = workbook.createStyle({
-  font: {
-    color: '#FF0800',
-    size: 12,
-  },
-  fill: {
-    type: 'pattern',
-    patternType: 'solid',
-    bgColor: '#00A1F8',
-    fgColor: '#FFFF00',
-  },
-  numberFormat: '$#,##0.00; ($#,##0.00); -'
-});
-
-// Set value of cell A1 to 100 as a number type styled with paramaters of style
-worksheet.cell(1,1).number(100).style(style);
-
-// Set value of cell B1 to 300 as a number type styled with paramaters of style
-worksheet.cell(1,2).number(200).style(style);
-
-// Set value of cell C1 to a formula styled with paramaters of style
-worksheet.cell(1,3).formula('A1 + B1').style(style);
-
-// Set value of cell A2 to 'string' styled with paramaters of style
-worksheet.cell(2,1).string('string').style(style);
-
-// Set value of cell A3 to true as a boolean type styled with paramaters of style but with an adjustment to the font size.
-worksheet.cell(3,1).bool(true).style(style).style({font: {size: 14}});
-
-// workbook.write('Excel.xlsx');
+var worksheet = workbook.addWorksheet('Sheet 1', options);
 
 function exportExcel(datos){
   let datosRequeridos = {}
+    var fila =1
+        worksheet.cell(1,1).string("Nombre")
+        worksheet.cell(1,2).string("Fecha")
+        worksheet.cell(1,3).string("Hora de entrada")
+        worksheet.cell(1,4).string("Hora de salida")
     datos.map(x=>{
       let id = x.id
-      datosRequeridos[id]={
-        "entrada": x.check_in_time,
-        "salida": x.departure_time,
-        "nombre": x.employee.names + " " + x.employee.last_names
+      
+      if(x.check_in_time != null && x.departure_time != null){
+        fila++
+        
+        let horaEntrada = x.check_in_time.toLocaleString("en-US", {timeZone: "America/Danmarkshavn"})
+        let horaSalida = x.departure_time.toLocaleString("en-US", {timeZone: "America/Danmarkshavn"})
+
+        let matchHours = /\d{2}:\d{2}:\d{2}\sAM|\d:\d{2}:\d{2}\sAM|\d{2}:\d{2}:\d{2}\sPM|\d:\d{2}:\d{2}\sPM/g
+        // datosRequeridos[id]={
+        //   "entrada": horaEntrada.match(/\d{2}\:\d{2}\:\d{2}/g)[0],
+        //   "salida": horaSalida.match(/\d{2}\:\d{2}\:\d{2}/g)[0],
+        //   "fecha": horaEntrada.match(/^(.*?)\d{4}/g)[0],
+        //   "nombre": x.employee.names + " " + x.employee.last_names
+        // }
+        // console.log(
+        //   x.check_in_time.toLocaleString("en-US", {timeZone: "America/Danmarkshavn"})
+        // );
+        worksheet.cell(fila,1).string(x.employee.names + " " + x.employee.last_names)
+        worksheet.cell(fila,2).string(horaEntrada.match(/^(.*?)\d{4}/g)[0])
+        worksheet.cell(fila,3).string(horaEntrada.match(matchHours)[0])
+        worksheet.cell(fila,4).string(horaSalida.match(matchHours)[0])
+        
+        // x.check_in_time.map(x=>{
+        //   worksheet.cell(fila,columna).string(x.check_in_time.toString())
+        // })
       }
     })
-
+    workbook.write('Excel.xlsx');
     return datosRequeridos
 }
 
