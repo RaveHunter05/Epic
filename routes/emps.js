@@ -4,6 +4,7 @@ const db = require('../config/database')
 const {Category, Employee, In_out, User} = require('../models/Category')
 const Sequelize= require('sequelize')
 const exportarExcel = require('../excel/crear_excel')
+const fs = require('fs')
 
 const Op=Sequelize.Op
 
@@ -298,6 +299,7 @@ router.get('/inout-between/:id/:fecha1/:fecha2', (req,res)=>{
 
 router.get('/inout-only/:fecha1/:fecha2', (req,res) => {
     let {fecha1, fecha2}=req.params
+    
     In_out.findAll({
         where:{
             created_at:{
@@ -309,8 +311,21 @@ router.get('/inout-only/:fecha1/:fecha2', (req,res) => {
         }]
     })
     .then(inout=>{
-        console.log(exportarExcel.exportExcel(inout))
-        res.json({"respuesta: ": inout})
+        exportarExcel.exportExcel(inout)
+
+        // res.download("../Excel.xlsx")    
+
+        setTimeout(() => {
+            if(fs.existsSync('./Excel.xlsx')){
+                console.log('si existe')
+                res.download("./Excel.xlsx")
+                setTimeout(() => {
+                    fs.unlinkSync('./Excel.xlsx')
+                }, 5000);
+            }else{
+                console.log('no existe')
+            }
+        }, 5000);
     })
     .catch(err => console.log('There was an error', err))
 })
